@@ -1,7 +1,7 @@
 # delayed-execution
 This script allows the user to delay the execution of a command, e.g. to shut down their machine after a set amount of time.
 
-##FAQ##
+##FAQ
 
 **Why not just use 'sleep 1h; your_command'?**
 
