@@ -7,7 +7,7 @@ from PyQt5.QtCore import QSettings
 from threading import Thread
 
 class MainWindow(QtWidgets.QMainWindow):
-	def __init__(self, verbose = True):
+	def __init__(self, verbose = False):
 		# Inherited class __init__ method
 		super(MainWindow, self).__init__()
 		# Load external .ui file
