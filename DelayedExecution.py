@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import time
 import os
 import sys
@@ -11,7 +11,8 @@ class MainWindow(QtWidgets.QMainWindow):
 		# Inherited class __init__ method
 		super(MainWindow, self).__init__()
 		# Load external .ui file
-		uic.loadUi("gui.ui", self)
+		self.scriptDir = os.path.dirname(os.path.realpath(__file__)) + "/"
+		uic.loadUi( self.scriptDir + "gui.ui", self)
 		self.show()
 		# Misc. variables
 		self.buttonText = ["Start", "Stop"]
@@ -21,7 +22,7 @@ class MainWindow(QtWidgets.QMainWindow):
 		# Initialisation & functions
 		self.settings = QSettings("ParaDice", "DelayedExecution")
 		self.loadSettings()
-		self.settingsDialogue = SettingsDialogue(self.settings)
+		self.settingsDialogue = SettingsDialogue(self.settings, self.scriptDir)
 		# Bind signals to elements
 		# Menu
 		self.actionQuit.triggered.connect(self.quit)
@@ -95,7 +96,7 @@ class MainWindow(QtWidgets.QMainWindow):
 		if savingIsEnabled:
 			currentSettings = self.getValues()
 			# Save interval values (if enabled)
-			if self.settingsDialogue.saveInterval(): #üüü
+			if self.settingsDialogue.saveInterval():
 				intervalKeys = ["hours", "minutes", "seconds"]
 				for k in intervalKeys:
 					self.settings.setValue(k, currentSettings[k])
@@ -198,12 +199,12 @@ class MainWindow(QtWidgets.QMainWindow):
 			#print(command)
 
 class SettingsDialogue(QtWidgets.QDialog):
-	def __init__(self, settings):
+	def __init__(self, settings ,scriptDir):
 		# Inherited class __init__ method
 		super(SettingsDialogue, self).__init__()
 		self.settings = settings
 		# Load external .ui file
-		uic.loadUi("settings.ui", self)
+		uic.loadUi(scriptDir + "settings.ui", self)
 		# Read settings and set checkboxes accordingly
 		saveSettings = bool(settings.value("saveSettings"))
 		self.checkBox_saveSettings.setChecked(saveSettings)
@@ -214,6 +215,8 @@ class SettingsDialogue(QtWidgets.QDialog):
 			self.checkBox_commandId.setChecked(True)
 		if settings.contains("saveCommand") and bool(settings.value("saveCommand")):
 			self.checkBox_command.setChecked(True)
+		# Signals
+		self.checkBox_saveSettings.clicked.connect(self.toggleSaving)
 	
 	# Checks whether saving the settings upon exiting the application is enabled and returns state
 	def savingIsEnabled(self):
@@ -235,7 +238,7 @@ class SettingsDialogue(QtWidgets.QDialog):
 			if not enable: # If disabled, deselect all buttons
 				b.setChecked(enable)
 
-# Procedural part
+# Main method
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
 	# Main window
