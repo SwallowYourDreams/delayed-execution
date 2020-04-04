@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 import time
 import os
 import sys
@@ -54,9 +54,9 @@ class MainWindow(QtWidgets.QMainWindow):
 		checked = self.buttonGroup_command.checkedButton().text().lower()
 		# Determine command to be executed based on the text of the radio button that is checkd
 		command = {
-			"shutdown*": "sudo shutdown now",
+			"shutdown*": "sudo shutdown -h now",
 			"suspend*": "sudo systemctl suspend",
-			"reboot*": "sudo reboot now",
+			"reboot*": "sudo reboot -h now",
 			"command:": commandField # The colon is obligatory!
 		}[checked]
 		
