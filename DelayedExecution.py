@@ -208,8 +208,8 @@ class MainWindow(QtWidgets.QMainWindow):
 			self.progressbar.reset()
 			# Reset elements
 			self.toggleButton()
+			self.toggleInterval()
 			os.system(command)
-			#print(command)
 
 class SettingsDialogue(QtWidgets.QDialog):
 	def __init__(self, settings ,scriptDir):
