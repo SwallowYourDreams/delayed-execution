@@ -27,4 +27,4 @@ Then execute run.sh in a terminal. It will prompt you for your superuser passwor
 
 **Why doesn't my machine power off / reboot / suspend?**
 
-Please note that shutdown, suspend and reboot require superuser privileges. These must be obtained by running the script as root: `sudo DelayedExecution.py`. Otherwise it will prompt you to enter the superuser password _after_ the countdown has ended.
+Please note that shutdown, suspend and reboot require superuser privileges. These must be obtained by running the script as root: `sudo DelayedExecution.py`. The file run.sh does just that, so just start the script through run.sh. Otherwise the script will prompt you to enter the superuser password _after_ the countdown has ended, which is probably not useful.
