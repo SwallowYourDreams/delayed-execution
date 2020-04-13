@@ -15,7 +15,7 @@ This script is geared towards users who have little to no experience with the co
 
 Parts of this script (such as shutdown and reboot) should run on all Unix-based operating systems, such as the various Linux and BSD distributions, as well as MacOS. Windows is not supported.
 
-The "suspend" option will only work on systems running systemd (such as Ubuntu, Debian, Fedora, Arch Linux, Manjaro, etc). If yours is a non-systemd distribution, you may work around this by running the command `sudo pm-suspend`. A similar suspend workaround goes for MacOS users, who must run the command `pmset sleepnow`.
+The "suspend" option will only work on systems running systemd (such as Ubuntu, Debian, Fedora, Arch Linux, Manjaro, etc). If yours is a non-systemd distribution, you may work around this by running the command `sudo pm-suspend`. A similar suspend workaround exists for MacOS users, who must run the command `pmset sleepnow`.
 
 **How do I run the script properly?**
 
