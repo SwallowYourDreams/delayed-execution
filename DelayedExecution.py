@@ -25,7 +25,7 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.settingsDialogue = SettingsDialogue(self.settings, self.scriptDir)
 		# Bind signals to elements
 		# Menu
-		self.actionQuit.triggered.connect(self.quit)
+		self.actionQuit.triggered.connect(lambda: sys.exit(0))
 		self.actionSettings.triggered.connect(self.showDialogue)
 		# UI
 		self.pushButton_start.clicked.connect(self.run)
@@ -40,14 +40,14 @@ class MainWindow(QtWidgets.QMainWindow):
 		else:
 			msg = 'No superuser privileges. Run script with "sudo" to obtain them.'
 		self.label_root.setText(msg)
-		
 
-
+	# Overwrites the native closeEvent method in order to allow for saving the settings first.
 	def closeEvent(self, event):
 		# Save settings on closing
 		self.saveSettings()
 		event.accept() # Let the window close
 
+	# Runs a new delayed execution by starting a timer in a new thread
 	def run(self):
 		# Get values from input elements
 		self.updateDelay()
@@ -62,31 +62,40 @@ class MainWindow(QtWidgets.QMainWindow):
 		}[checked]
 		
 		# Get current state, i.e. whether a timer is currently running or not. 0 = start, 1 = stop
-		if self.updateButton() == 0: # Run
+		if self.toggleButton() == 0: # Run
 			self.runTimer = True
+			self.toggleInterval()
 			if self.verbose:
 				print("Timer started.")
 			t = Thread(target = self.startTimer, args=(self.delay, command,))
 			t.start()
 		else: # Stop
 			self.runTimer = False
+			self.toggleInterval()
 			if self.verbose:
 				print("Timer stopped.")
 			self.progressbar.reset()
 			self.label_remainingTime.setText(self.getDelayString(self.delay))
 	
+	# Makes the settings dialogue appear
 	def showDialogue(self):
 		self.settingsDialogue.show()
-	def quit(self):
-		sys.exit(0)
 		
+	# Enables / disables the command input field if the "command" radio button is (not) selected
 	def toggleCommand(self, button):
 		enable = False
 		if button.objectName() == "radioButton_command":
 			enable = True
 		self.lineEdit_command.setEnabled(enable)
-			
 		
+	# Enables / disables the interval input elements, e.g. if a countdown is started or stopped
+	def toggleInterval(self):
+		enable = not self.spinBox_hours.isEnabled()
+		self.spinBox_hours.setEnabled(enable)
+		self.spinBox_minutes.setEnabled(enable)
+		self.spinBox_seconds.setEnabled(enable)
+	
+	# Saves the settings to a config file
 	def saveSettings(self):
 		# Clear file
 		self.settings.clear()
@@ -124,6 +133,7 @@ class MainWindow(QtWidgets.QMainWindow):
 		values["command"] = self.lineEdit_command.text()
 		return values
 	
+	# Gets the values from the interval input fields and updates both the internal timer and the timer in the UI
 	def updateDelay(self):
 		# Get values from input elements
 		v = self.getValues()
@@ -143,13 +153,15 @@ class MainWindow(QtWidgets.QMainWindow):
 			string = "0" + string
 		return string
 	
-	def updateButton(self):
+	# Toggles the button text between "Run" and "Stop"
+	def toggleButton(self):
 		currentState = self.buttonText.index(self.pushButton_start.text())
 		# Update button text
 		newText = self.buttonText[ not currentState ] # Get new button text 
 		self.pushButton_start.setText(newText) # Set new button text
 		return currentState
-		
+	
+	# Loads the settings from a config file and sets the UI accordingly
 	def loadSettings(self):
 		if bool(self.settings.value("saveSettings")):
 			# Interval
@@ -166,18 +178,19 @@ class MainWindow(QtWidgets.QMainWindow):
 			if bool(self.settings.contains("saveCommand")) and bool(self.settings.value("saveCommand")):
 				self.lineEdit_command.setText(self.settings.value("command"))
 	
-	#Update all progress-related UI elements
+	#Updates all progress-related UI elements
 	def update(self, currentDelay):
 		self.progressbar.setValue(self.delay - currentDelay) # update progressbar
 		self.updateTimer(currentDelay)
-	# Update only the timer that shows the remaining time
+		
+	# Updates only the timer that shows the remaining time
 	def updateTimer(self, currentDelay):
 		delayString = self.getDelayString(currentDelay)
 		# update remainingTime label in GUI
 		self.label_remainingTime.setText(delayString)
 		self.label_remainingTime.adjustSize()
 	
-	# Start new timer
+	# Starts new timer
 	def startTimer(self, delay, command):
 		currentDelay = delay
 		# Set progressbar max. value
@@ -194,7 +207,7 @@ class MainWindow(QtWidgets.QMainWindow):
 			self.update(currentDelay) # Last update to show 100% progress / 00:00:00 in remaining time
 			self.progressbar.reset()
 			# Reset elements
-			self.updateButton()
+			self.toggleButton()
 			os.system(command)
 			#print(command)
 
