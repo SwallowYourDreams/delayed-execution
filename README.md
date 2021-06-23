@@ -19,11 +19,7 @@ The "suspend" option will only work on systems running systemd (such as Ubuntu, 
 
 **How do I run the script properly?**
 
-First, make run.sh and DelayedExecution.py executable:
-
-`chmod +x DelayedExecution.py run.sh`
-
-Then execute run.sh in a terminal. It will prompt you for your superuser password, run the script with superuser privileges and then close down the terminal.
+Execute run.sh in a terminal. It will prompt you for your superuser password and pass these privileges on to the actual script. This is necessary for running commands that require superuser privileges, such as shutdown and reboot.
 
 **Why doesn't my machine power off / reboot / suspend?**
 
