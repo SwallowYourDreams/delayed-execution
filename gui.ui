@@ -54,7 +54,7 @@
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Puts the machine in suspend mode to save energy.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
-            <string>Suspend*</string>
+            <string>Suspend</string>
            </property>
            <attribute name="buttonGroup">
             <string notr="true">buttonGroup_command</string>
