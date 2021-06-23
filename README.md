@@ -19,8 +19,8 @@ The "suspend" option will only work on systems running systemd (such as Ubuntu, 
 
 **How do I run the script properly?**
 
-Execute run.sh in a terminal. It will prompt you for your superuser password and pass these privileges on to the actual script. This is necessary for running commands that require superuser privileges, such as shutdown and reboot.
+Execute `run.sh` in a terminal. It will prompt you for your superuser password and pass these privileges on to the actual script. This is necessary for running commands that require superuser privileges, such as shutdown and reboot.
 
 **Why doesn't my machine power off / reboot / suspend?**
 
-Please note that shutdown and reboot require superuser privileges. These must be obtained by running the script as root: `sudo DelayedExecution.py`. The file run.sh does just that, so just start the script through run.sh. Otherwise the script will prompt you to enter the superuser password _after_ the countdown has ended, which is probably not useful.
+Please note that shutdown and reboot require superuser privileges. These must be obtained by running the script as root: `sudo DelayedExecution.py`. The file `run.sh` does just that, so just start the script through `run.sh`. Otherwise the script will prompt you to enter the superuser password _after_ the countdown has ended, which is probably not useful.
